@@ -2,6 +2,17 @@
 
 {% block content %}
     <h1>Список постов</h1>
+
+    <form method="get" class="posts-per-page-form">
+        <label for="posts_per_page">Постов на странице:</label>
+        <select name="posts_per_page" id="posts_per_page" onchange="this.form.submit()">
+            <option value="5" {% if posts_per_page == '5' %}selected{% endif %}>5</option>
+            <option value="10" {% if posts_per_page == '10' %}selected{% endif %}>10</option>
+            <option value="20" {% if posts_per_page == '20' %}selected{% endif %}>20</option>
+            <option value="50" {% if posts_per_page == '50' %}selected{% endif %}>50</option>
+        </select>
+    </form>
+
     <ul>
         {% for post in page_posts %}
             <li>
@@ -12,26 +23,26 @@
             <p>Нет постов.</p>
         {% endfor %}
     </ul>
-    <!-- показываем пагинатор -->
+
     <div class="pagination">
         <p>Страницы:</p>
         <ul>
             {% if page_posts.has_previous %}
-                <li><a href="?page=1"><<</a></li>
-                <li><a href="?page={{ page_posts.previous_page_number }}">Previous</a></li>
+                <li><a href="?page=1&posts_per_page={{ posts_per_page }}"><<</a></li>
+                <li><a href="?page={{ page_posts.previous_page_number }}&posts_per_page={{ posts_per_page }}">Previous</a></li>
             {% endif %}
 
             {% for i in page_posts.paginator.page_range %}
                 {% if page_posts.number == i %}
                     <li class="active">{{ i }}</li>
                 {% else %}
-                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    <li><a href="?page={{ i }}&posts_per_page={{ posts_per_page }}">{{ i }}</a></li>
                 {% endif %}
             {% endfor %}
 
             {% if page_posts.has_next %}
-                <li><a href="?page={{ page_posts.next_page_number }}">Next</a></li>
-                <li><a href="?page={{ page_posts.paginator.num_pages }}">>>></a></li>
+                <li><a href="?page={{ page_posts.next_page_number }}&posts_per_page={{ posts_per_page }}">Next</a></li>
+                <li><a href="?page={{ page_posts.paginator.num_pages }}&posts_per_page={{ posts_per_page }}">>>></a></li>
             {% endif %}
         </ul>
     </div>
